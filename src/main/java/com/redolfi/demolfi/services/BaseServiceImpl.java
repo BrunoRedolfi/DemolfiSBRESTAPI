@@ -3,11 +3,13 @@ package com.redolfi.demolfi.services;
 import com.redolfi.demolfi.entities.Base;
 import com.redolfi.demolfi.repositories.BaseRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public abstract class BaseServiceImpl<E extends Base, ID extends Serializable> implements BaseService<E, ID> {
     protected BaseRepository<E, ID> baseRepository;
 
