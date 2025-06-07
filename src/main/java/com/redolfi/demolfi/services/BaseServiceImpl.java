@@ -3,13 +3,15 @@ package com.redolfi.demolfi.services;
 import com.redolfi.demolfi.entities.Base;
 import com.redolfi.demolfi.repositories.BaseRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
 
-@Service
+
 public abstract class BaseServiceImpl<E extends Base, ID extends Serializable> implements BaseService<E, ID> {
     protected BaseRepository<E, ID> baseRepository;
 
@@ -22,6 +24,17 @@ public abstract class BaseServiceImpl<E extends Base, ID extends Serializable> i
     public List<E> findAll() throws Exception {
         try {
             List<E> entities = baseRepository.findAll();
+            return entities;
+        } catch (Exception e){
+            throw new Exception(e.getMessage());
+        }
+    }
+
+    @Override
+    @Transactional
+    public Page<E> findAll(Pageable pageable)throws Exception{
+        try {
+            Page<E> entities = baseRepository.findAll(pageable);
             return entities;
         } catch (Exception e){
             throw new Exception(e.getMessage());
