@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import com.redolfi.demolfi.repositories.PersonaRepository;
 
 @Service
-public class PersonaServiceImpl extends BaseServiceImpl<Persona, Long> implements  PersonaService {
+public class PersonaServiceImpl extends BaseServiceImpl<Persona, Long> implements PersonaService {
     @Autowired
     private PersonaRepository personaRepository;
 
