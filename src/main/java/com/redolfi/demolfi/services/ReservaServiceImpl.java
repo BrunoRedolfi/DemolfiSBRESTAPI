@@ -14,7 +14,6 @@ import java.util.List;
 public class ReservaServiceImpl extends BaseServiceImpl<Reserva, Long> implements ReservaService {
     @Autowired
     private ReservaRepository reservaRepository;
-    private VueloRepository vueloRepository; // Nuevo repositorio
 
     public ReservaServiceImpl(ReservaRepository reservaRepository) {
         super(reservaRepository);
@@ -23,20 +22,15 @@ public class ReservaServiceImpl extends BaseServiceImpl<Reserva, Long> implement
     @Override
     @Transactional
     public Reserva save(Reserva reserva) throws Exception {
-        // Verifica si el vuelo existe
-        Vuelo vuelo = vueloRepository.findById(reserva.getVuelo().getId())
+        // Carga el vuelo con las reservas usando JOIN FETCH
+        Vuelo vuelo = reservaRepository.findVueloWithReservas(reserva.getVuelo().getId())
                 .orElseThrow(() -> new Exception("Vuelo no encontrado"));
 
-        // Consulta directa de reservas existentes para este vuelo
-        Long reservasCount = reservaRepository.countByVueloId(vuelo.getId());
-
-        if (reservasCount >= vuelo.getAvion().getCapacidad()) {
+        if (vuelo.getReservas().size() >= vuelo.getAvion().getCapacidad()) {
             throw new Exception("Avión lleno. Capacidad: " + vuelo.getAvion().getCapacidad());
         }
 
-        // Establece las relaciones bidireccionales
         reserva.setVuelo(vuelo);
-
         return super.save(reserva);
     }
     @Override
