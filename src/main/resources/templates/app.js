@@ -113,41 +113,34 @@ document.addEventListener('DOMContentLoaded', function() {
 
         reservations.forEach(reservation => {
             const flight = reservation.vuelo;
+            const user = reservation.usuario; // Asegúrate que esto no sea null
             const origen = aeropuertos.find(a => a.id === flight.salida.id) || flight.salida;
             const destino = aeropuertos.find(a => a.id === flight.destino.id) || flight.destino;
 
             const reservationElement = document.createElement('div');
             reservationElement.className = 'reservation-card';
             reservationElement.innerHTML = `
-                <div class="d-flex justify-content-between">
-                    <h5>Reserva #${reservation.id}</h5>
-                    <span class="badge bg-success">Confirmada</span>
+            <div class="d-flex justify-content-between">
+                <h5>Reserva #${reservation.id}</h5>
+                <span class="badge bg-success">Confirmada</span>
+            </div>
+            <p><strong>Pasajero:</strong> ${user.nombre || 'N/A'} ${user.apellido || 'N/A'}</p>
+            <div class="row mt-2">
+                <div class="col-md-6">
+                    <p><strong>Vuelo:</strong> ${flight.avion.nombre}</p>
+                    <p><strong>Salida:</strong> ${origen.ciudad}</p>
                 </div>
-                <p><strong>Pasajero:</strong> ${reservation.usuario.nombre} ${reservation.usuario.apellido}</p>
-                <div class="row mt-2">
-                    <div class="col-md-6">
-                        <p><strong>Vuelo:</strong> ${flight.avion.nombre}</p>
-                        <p><strong>Salida:</strong> ${origen.ciudad}</p>
-                    </div>
-                    <div class="col-md-6">
-                        <p><strong>Fecha:</strong> ${new Date(flight.fechaSalida).toLocaleDateString()}</p>
-                        <p><strong>Destino:</strong> ${destino.ciudad}</p>
-                    </div>
+                <div class="col-md-6">
+                    <p><strong>Fecha:</strong> ${new Date(flight.fechaSalida).toLocaleDateString()}</p>
+                    <p><strong>Destino:</strong> ${destino.ciudad}</p>
                 </div>
-                <button class="btn btn-danger btn-sm mt-2 w-100 cancel-btn" data-id="${reservation.id}">
-                    Cancelar Reserva
-                </button>
-            `;
+            </div>
+            <button class="btn btn-danger btn-sm mt-2 w-100 cancel-btn" data-id="${reservation.id}">
+                Cancelar Reserva
+            </button>
+        `;
 
             reservasContainer.appendChild(reservationElement);
-        });
-
-        // Agregar event listeners a los botones de cancelar
-        document.querySelectorAll('.cancel-btn').forEach(btn => {
-            btn.addEventListener('click', async (e) => {
-                const reservationId = e.target.getAttribute('data-id');
-                await cancelReservation(reservationId);
-            });
         });
     }
 
@@ -197,11 +190,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 throw new Error(error.error || 'Error al crear reserva');
             }
 
-            const newReservation = await reservationResponse.json();
-            console.log("Reserva creada:", newReservation); // Debug
-            // Actualizar UI
-            reservations.push(newReservation);
-            renderReservations();
+            await loadReservations();
+
 
             // Mostrar confirmación
             document.getElementById('reserva-details').innerHTML = `

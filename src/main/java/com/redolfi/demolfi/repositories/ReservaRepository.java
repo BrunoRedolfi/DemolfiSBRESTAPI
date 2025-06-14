@@ -18,4 +18,7 @@ public interface ReservaRepository extends BaseRepository<Reserva, Long> {
     @Query("SELECT v FROM Vuelo v LEFT JOIN FETCH v.reservas WHERE v.id = :id")
     Optional<Vuelo> findVueloWithReservas(Long id);
 
+    @Query("SELECT r FROM Reserva r JOIN FETCH r.usuario JOIN FETCH r.vuelo v JOIN FETCH v.avion JOIN FETCH v.salida JOIN FETCH v.destino")
+    List<Reserva> findAllWithDetails();
+
 }
