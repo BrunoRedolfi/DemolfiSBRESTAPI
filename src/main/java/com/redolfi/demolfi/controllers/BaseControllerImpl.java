@@ -1,16 +1,12 @@
 package com.redolfi.demolfi.controllers;
 
 import com.redolfi.demolfi.entities.Base;
-import com.redolfi.demolfi.entities.Persona;
 import com.redolfi.demolfi.services.BaseServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.io.Serializable;
 
 public abstract class BaseControllerImpl<E extends Base, S extends BaseServiceImpl<E, Long>> implements BaseController<E, Long> {
 

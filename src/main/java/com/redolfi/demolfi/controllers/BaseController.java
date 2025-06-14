@@ -1,9 +1,7 @@
 package com.redolfi.demolfi.controllers;
 
 
-import com.redolfi.demolfi.entities.Autor;
 import com.redolfi.demolfi.entities.Base;
-import com.redolfi.demolfi.repositories.BaseRepository;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
